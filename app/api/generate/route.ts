@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { translatePrompt, generateImageViaCloudflare } from '@/lib/ai-generator'
 import type { GenerateRequest, GenerateResponse } from '@/lib/ai-generator'
 
+export const runtime = 'edge'
+
 /**
  * POST /api/generate
  *
