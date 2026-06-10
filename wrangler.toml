@@ -1,0 +1,7 @@
+name = "xuong-dong-ho"
+compatibility_date = "2025-06-10"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+[env.production]
+routes = [{ pattern = "/api/*", script = "./api/index.js" }]
