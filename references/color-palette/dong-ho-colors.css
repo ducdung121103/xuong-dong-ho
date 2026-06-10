@@ -1,0 +1,98 @@
+:root {
+  /* ============================================
+     Bảng Màu Tranh Dân Gian Đông Hồ
+     Xưởng Đông Hồ - Design Tokens v1.0
+     ============================================ */
+
+  /* === 16 Màu Truyền Thống === */
+  --dong-ho-dark:      #1A1208;  /* Đen than tro - Charcoal Black */
+  --dong-ho-red:        #C0392B;  /* Đỏ son - Vermillion Red */
+  --dong-ho-gold:       #D4A017;  /* Vàng nghệ - Golden Turmeric */
+  --dong-ho-indigo:     #2C3E6B;  /* Xanh chàm - Indigo Plant Blue */
+  --dong-ho-green:      #4A7C59;  /* Xanh gỉ đồng - Copper Patina Green */
+  --dong-ho-paper:      #F5F0E0;  /* Trắng điệp - Pearl Diep Paper */
+  --dong-ho-brown:      #8B5E3C;  /* Nâu đất sét - Clay Brown */
+  --dong-ho-salmon:     #E8927C;  /* Hồng đào - Peach Blossom Pink */
+  --dong-ho-darkRed:    #7B1E0E;  /* Đỏ thẫm - Deep Crimson */
+  --dong-ho-mustard:    #B8860B;  /* Vàng nâu - Dark Mustard */
+  --dong-ho-teal:       #2E7D6E;  /* Xanh lá đậm - Deep Teal */
+  --dong-ho-cream:      #EDE8D5;  /* Kem nhạt - Light Cream */
+  --dong-ho-rust:       #9B4523;  /* Đỏ gạch - Brick Red */
+  --dong-ho-olive:      #6B7A3F;  /* Xanh rêu - Moss Green */
+  --dong-ho-tan:        #C8A87A;  /* Vàng cát - Sand Gold */
+  --dong-ho-darkBlue:   #1A2850;  /* Xanh đêm - Midnight Blue */
+
+  /* === Functional Palette - Brand === */
+  --brand-primary:      var(--dong-ho-red);
+  --brand-secondary:    var(--dong-ho-gold);
+  --brand-bg:           var(--dong-ho-dark);
+  --brand-surface:      #2A2015;
+  --brand-text:         var(--dong-ho-paper);
+  --brand-textMuted:    var(--dong-ho-tan);
+  --brand-border:       rgba(212, 160, 23, 0.2);
+  --brand-disabled:     var(--dong-ho-brown);
+
+  /* === Motif Category Colors === */
+  --motif-linh-vat:     var(--dong-ho-red);     /* 🐖 Linh vật */
+  --motif-thuc-vat:     var(--dong-ho-green);   /* 🌸 Cây cỏ */
+  --motif-hoa-van:      var(--dong-ho-indigo);  /* 🌊 Hoa văn */
+  --motif-chu-viet:     var(--dong-ho-gold);    /* ✍️ Chữ Việt */
+  --motif-khung-vien:   var(--dong-ho-brown);   /* 🖼️ Khung viền */
+
+  /* === Semantic Colors === */
+  --color-success:      var(--dong-ho-green);
+  --color-error:        var(--dong-ho-red);
+  --color-warning:      var(--dong-ho-gold);
+  --color-info:         var(--dong-ho-indigo);
+  --color-canvas:       var(--dong-ho-paper);
+
+  /* === Interactive States === */
+  --hover-glow:         0 8px 24px rgba(192, 57, 43, 0.4);
+  --hover-border:       var(--dong-ho-red);
+  --active-scale:       0.98;
+  --transition-normal:  200ms ease-out;
+  --transition-spring:  cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* === Utility Classes === */
+.bg-dong-ho-dark       { background-color: var(--dong-ho-dark); }
+.bg-dong-ho-red         { background-color: var(--dong-ho-red); }
+.bg-dong-ho-gold        { background-color: var(--dong-ho-gold); }
+.bg-dong-ho-indigo      { background-color: var(--dong-ho-indigo); }
+.bg-dong-ho-green       { background-color: var(--dong-ho-green); }
+.bg-dong-ho-paper       { background-color: var(--dong-ho-paper); }
+.bg-dong-ho-brown       { background-color: var(--dong-ho-brown); }
+.bg-dong-ho-salmon      { background-color: var(--dong-ho-salmon); }
+.bg-dong-ho-darkRed     { background-color: var(--dong-ho-darkRed); }
+.bg-dong-ho-mustard     { background-color: var(--dong-ho-mustard); }
+.bg-dong-ho-teal        { background-color: var(--dong-ho-teal); }
+.bg-dong-ho-cream       { background-color: var(--dong-ho-cream); }
+.bg-dong-ho-rust        { background-color: var(--dong-ho-rust); }
+.bg-dong-ho-olive       { background-color: var(--dong-ho-olive); }
+.bg-dong-ho-tan         { background-color: var(--dong-ho-tan); }
+.bg-dong-ho-darkBlue    { background-color: var(--dong-ho-darkBlue); }
+
+.text-dong-ho-dark      { color: var(--dong-ho-dark); }
+.text-dong-ho-red       { color: var(--dong-ho-red); }
+.text-dong-ho-gold      { color: var(--dong-ho-gold); }
+.text-dong-ho-indigo    { color: var(--dong-ho-indigo); }
+.text-dong-ho-green     { color: var(--dong-ho-green); }
+.text-dong-ho-paper     { color: var(--dong-ho-paper); }
+.text-dong-ho-brown     { color: var(--dong-ho-brown); }
+.text-dong-ho-salmon    { color: var(--dong-ho-salmon); }
+.text-dong-ho-darkRed   { color: var(--dong-ho-darkRed); }
+.text-dong-ho-mustard   { color: var(--dong-ho-mustard); }
+.text-dong-ho-teal      { color: var(--dong-ho-teal); }
+.text-dong-ho-cream     { color: var(--dong-ho-cream); }
+.text-dong-ho-rust      { color: var(--dong-ho-rust); }
+.text-dong-ho-olive     { color: var(--dong-ho-olive); }
+.text-dong-ho-tan       { color: var(--dong-ho-tan); }
+.text-dong-ho-darkBlue  { color: var(--dong-ho-darkBlue); }
+
+.border-dong-ho-dark    { border-color: var(--dong-ho-dark); }
+.border-dong-ho-red     { border-color: var(--dong-ho-red); }
+.border-dong-ho-gold    { border-color: var(--dong-ho-gold); }
+.border-dong-ho-indigo  { border-color: var(--dong-ho-indigo); }
+.border-dong-ho-green   { border-color: var(--dong-ho-green); }
+.border-dong-ho-paper   { border-color: var(--dong-ho-paper); }
+.border-dong-ho-brown   { border-color: var(--dong-ho-brown); }

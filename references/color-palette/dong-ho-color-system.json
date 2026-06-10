@@ -1,0 +1,226 @@
+{
+  "name": "Bảng Màu Tranh Dân Gian Đông Hồ",
+  "description": "Hệ thống 16 màu truyền thống được chiết xuất từ phân tích tranh Đông Hồ gốc, phục vụ thiết kế UI/UX cho Xưởng Đông Hồ",
+  "version": "1.0",
+  "colors": [
+    {
+      "id": "charcoal-black",
+      "hex": "#1A1208",
+      "rgb": [26, 18, 8],
+      "hsl": [33, 53, 7],
+      "name": "Đen than tro",
+      "nameEn": "Charcoal Black",
+      "category": "primary",
+      "origin": "Mực tàu từ than tre đốt, dùng in nét khắc gỗ",
+      "usage": "Nền chính dark mode, viền nét khắc, text chính",
+      "cssVar": "--dong-ho-dark"
+    },
+    {
+      "id": "vermillion-red",
+      "hex": "#C0392B",
+      "rgb": [192, 57, 43],
+      "hsl": [6, 63, 46],
+      "name": "Đỏ son",
+      "nameEn": "Vermillion Red",
+      "category": "accent",
+      "origin": "Từ đá son (chu sa) nghiền mịn, màu đỏ đặc trưng nhất tranh Đông Hồ",
+      "usage": "Accent chính, button chính, viền hover, điểm nhấn",
+      "cssVar": "--dong-ho-red"
+    },
+    {
+      "id": "golden-turmeric",
+      "hex": "#D4A017",
+      "rgb": [212, 160, 23],
+      "hsl": [43, 80, 46],
+      "name": "Vàng nghệ",
+      "nameEn": "Golden Turmeric",
+      "category": "accent",
+      "origin": "Từ củ nghệ tươi giã lấy nước, màu vàng ấm truyền thống",
+      "usage": "Accent phụ, viền frame, badge, highlight",
+      "cssVar": "--dong-ho-gold"
+    },
+    {
+      "id": "indigo-plant",
+      "hex": "#2C3E6B",
+      "rgb": [44, 62, 107],
+      "hsl": [223, 42, 30],
+      "name": "Xanh chàm",
+      "nameEn": "Indigo Plant Blue",
+      "category": "secondary",
+      "origin": "Từ cây chàm ngâm ủ lên men, màu xanh đậm truyền thống",
+      "usage": "Màu phụ cho họa tiết, icon secondary",
+      "cssVar": "--dong-ho-indigo"
+    },
+    {
+      "id": "copper-patina-green",
+      "hex": "#4A7C59",
+      "rgb": [74, 124, 89],
+      "hsl": [138, 25, 39],
+      "name": "Xanh gỉ đồng",
+      "nameEn": "Copper Patina Green",
+      "category": "secondary",
+      "origin": "Từ gỉ đồng, lá trầu không, vỏ trấu xanh nghiền",
+      "usage": "Màu cây cỏ, lá, motif thực vật",
+      "cssVar": "--dong-ho-green"
+    },
+    {
+      "id": "pearl-diep-paper",
+      "hex": "#F5F0E0",
+      "rgb": [245, 240, 224],
+      "hsl": [46, 51, 92],
+      "name": "Trắng điệp",
+      "nameEn": "Pearl Diep Paper",
+      "category": "background",
+      "origin": "Nền giấy dó phủ bột vỏ sò điệp, óng ánh ngọc trai đặc trưng",
+      "usage": "Nền canvas editor, nền text, surface sáng",
+      "cssVar": "--dong-ho-paper"
+    },
+    {
+      "id": "clay-brown",
+      "hex": "#8B5E3C",
+      "rgb": [139, 94, 60],
+      "hsl": [26, 40, 39],
+      "name": "Nâu đất sét",
+      "nameEn": "Clay Brown",
+      "category": "neutral",
+      "origin": "Từ đất sét nung, vỏ cây, màu nền gỗ mộc bản",
+      "usage": "Surface secondary, card nền, border",
+      "cssVar": "--dong-ho-brown"
+    },
+    {
+      "id": "peach-blossom",
+      "hex": "#E8927C",
+      "rgb": [232, 146, 124],
+      "hsl": [12, 70, 70],
+      "name": "Hồng đào",
+      "nameEn": "Peach Blossom Pink",
+      "category": "accent",
+      "origin": "Từ hoa đào, cánh sen đỏ, màu ấm nhẹ nhàng",
+      "usage": "Accent nhẹ, motif hoa đào, badge phụ",
+      "cssVar": "--dong-ho-salmon"
+    },
+    {
+      "id": "deep-crimson",
+      "hex": "#7B1E0E",
+      "rgb": [123, 30, 14],
+      "hsl": [9, 80, 27],
+      "name": "Đỏ thẫm",
+      "nameEn": "Deep Crimson",
+      "category": "accent-dark",
+      "origin": "Son đậm đặc, màu đỏ cánh sen đậm",
+      "usage": "Text nhấn mạnh, button hover dark",
+      "cssVar": "--dong-ho-darkRed"
+    },
+    {
+      "id": "dark-mustard",
+      "hex": "#B8860B",
+      "rgb": [184, 134, 11],
+      "hsl": [43, 89, 38],
+      "name": "Vàng nâu",
+      "nameEn": "Dark Mustard",
+      "category": "neutral-dark",
+      "origin": "Nghệ già, đất vàng sẫm",
+      "usage": "Border, text vàng đậm, icon state",
+      "cssVar": "--dong-ho-mustard"
+    },
+    {
+      "id": "deep-teal",
+      "hex": "#2E7D6E",
+      "rgb": [46, 125, 110],
+      "hsl": [169, 46, 34],
+      "name": "Xanh lá đậm",
+      "nameEn": "Deep Teal",
+      "category": "secondary-dark",
+      "origin": "Lá cây rừng, rêu đá xanh đậm",
+      "usage": "Họa tiết cây cỏ đậm, shadow subtle",
+      "cssVar": "--dong-ho-teal"
+    },
+    {
+      "id": "light-cream",
+      "hex": "#EDE8D5",
+      "rgb": [237, 232, 213],
+      "hsl": [48, 40, 88],
+      "name": "Kem nhạt",
+      "nameEn": "Light Cream",
+      "category": "background-light",
+      "origin": "Giấy điệp pha loãng, nền sáng nhẹ nhàng",
+      "usage": "Nền section sáng, card inner background",
+      "cssVar": "--dong-ho-cream"
+    },
+    {
+      "id": "brick-red",
+      "hex": "#9B4523",
+      "rgb": [155, 69, 35],
+      "hsl": [17, 63, 37],
+      "name": "Đỏ gạch",
+      "nameEn": "Brick Red",
+      "category": "accent-earth",
+      "origin": "Đất nung gạch, màu đỏ nâu ấm của làng quê",
+      "usage": "Accent mặt đất, viền rustic, button secondary",
+      "cssVar": "--dong-ho-rust"
+    },
+    {
+      "id": "moss-green",
+      "hex": "#6B7A3F",
+      "rgb": [107, 122, 63],
+      "hsl": [75, 32, 36],
+      "name": "Xanh rêu",
+      "nameEn": "Moss Green",
+      "category": "earth",
+      "origin": "Rêu tường cổ, lá khô vùng quê Bắc Bộ",
+      "usage": "Background phụ, icon muted, họa tiết nền",
+      "cssVar": "--dong-ho-olive"
+    },
+    {
+      "id": "sand-gold",
+      "hex": "#C8A87A",
+      "rgb": [200, 168, 122],
+      "hsl": [35, 41, 63],
+      "name": "Vàng cát",
+      "nameEn": "Sand Gold",
+      "category": "warm-neutral",
+      "origin": "Cát vàng sông Hồng, ánh nắng hoàng hôn đồng bằng",
+      "usage": "Highlight nhẹ, border tinh tế, gradient phụ",
+      "cssVar": "--dong-ho-tan"
+    },
+    {
+      "id": "midnight-blue",
+      "hex": "#1A2850",
+      "rgb": [26, 40, 80],
+      "hsl": [224, 51, 21],
+      "name": "Xanh đêm",
+      "nameEn": "Midnight Blue",
+      "category": "dark-accent",
+      "origin": "Màu trời đêm, chàm đậm đặc, màu áo the truyền thống",
+      "usage": "Nền section tối, overlay, shadow đậm",
+      "cssVar": "--dong-ho-darkBlue"
+    }
+  ],
+  "functionalPalette": {
+    "brand": {
+      "primary": "#C0392B",
+      "secondary": "#D4A017",
+      "background": "#1A1208",
+      "surface": "#2A2015",
+      "text": "#F5F0E0",
+      "textMuted": "#C8A87A",
+      "border": "rgba(212, 160, 23, 0.2)",
+      "disabled": "#8B5E3C"
+    },
+    "motifByCategory": {
+      "linh-vat": "#C0392B",
+      "thuc-vat": "#4A7C59",
+      "hoa-van": "#2C3E6B",
+      "chu-viet": "#D4A017",
+      "khung-vien": "#8B5E3C"
+    },
+    "semanticColors": {
+      "success": "#4A7C59",
+      "error": "#C0392B",
+      "warning": "#D4A017",
+      "info": "#2C3E6B",
+      "canvas": "#F5F0E0"
+    }
+  },
+  "tailwindConfig": "dong-ho-dark: '#1A1208', dong-ho-red: '#C0392B', dong-ho-gold: '#D4A017', dong-ho-indigo: '#2C3E6B', dong-ho-green: '#4A7C59', dong-ho-paper: '#F5F0E0', dong-ho-brown: '#8B5E3C', dong-ho-salmon: '#E8927C', dong-ho-darkRed: '#7B1E0E', dong-ho-mustard: '#B8860B', dong-ho-teal: '#2E7D6E', dong-ho-cream: '#EDE8D5', dong-ho-rust: '#9B4523', dong-ho-olive: '#6B7A3F', dong-ho-tan: '#C8A87A', dong-ho-darkBlue: '#1A2850'"
+}

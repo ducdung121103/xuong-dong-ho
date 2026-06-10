@@ -1,0 +1,83 @@
+"use client"
+
+import { Button } from "@/components/ui/button"
+import { ArrowRight, Stamp } from "lucide-react"
+import Image from "next/image"
+import { useAppStore } from "@/lib/store"
+
+export function Hero() {
+  const setActiveView = useAppStore((s) => s.setActiveView)
+
+  return (
+    <section className="relative overflow-hidden paper-grain">
+      <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-16 md:py-24 lg:grid-cols-2 lg:gap-8 lg:py-28">
+        <div className="flex flex-col items-start gap-6">
+          <span className="inline-flex items-center gap-2 rounded-full border border-secondary/40 bg-secondary/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-secondary">
+            <Stamp className="size-3.5" aria-hidden="true" />
+            Xưởng khắc ấn số · Làng Đông Hồ
+          </span>
+
+          <h1 className="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance text-foreground woodcut-text sm:text-5xl lg:text-6xl">
+            Khắc một bản in,
+            <br />
+            <span className="text-primary">in một câu chuyện.</span>
+          </h1>
+
+          <p className="max-w-md text-pretty text-base leading-relaxed text-muted-foreground">
+            Tái hiện nghệ thuật tranh dân gian Đông Hồ trên không gian số. Mỗi
+            lớp màu là một bản khắc riêng — chọn mộc bản, canh từng lớp son,
+            điệp và xuất bản tác phẩm mang dấu ấn của bạn.
+          </p>
+
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Button
+              size="lg"
+              onClick={() => setActiveView("ai-generator")}
+              className="stamp-press group bg-primary text-primary-foreground hover:bg-primary"
+            >
+              Tạo bản khắc ấn cho riêng bạn
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-secondary/40 bg-transparent text-foreground hover:bg-secondary/10 hover:text-foreground"
+            >
+              Xem bộ sưu tập
+            </Button>
+          </div>
+
+          <dl className="mt-4 grid grid-cols-3 gap-6 border-t border-border pt-6">
+            {[
+              { v: "120+", l: "Mộc bản gốc" },
+              { v: "4 lớp", l: "In đa sắc" },
+              { v: "350 năm", l: "Di sản nghề" },
+            ].map((s) => (
+              <div key={s.l}>
+                <dt className="font-serif text-2xl font-bold text-secondary">
+                  {s.v}
+                </dt>
+                <dd className="text-xs text-muted-foreground">{s.l}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <div className="relative flex flex-col items-center gap-6">
+          <div className="relative w-full max-w-md aspect-square rounded-xl overflow-hidden border-4 border-secondary/20 shadow-lg paper-grain bg-card">
+            <Image
+              src="/dong-ho/buffalo-boy.png"
+              alt="Mục đồng thổi sáo - Shepherd's Flute"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+          <p className="text-center text-xs text-muted-foreground">
+            Dự chuẩn để tách các lớp mộc bản · {"\u201C"}Mục đồng thổi sáo{"\u201D"}
+          </p>
+        </div>
+      </div>
+    </section>
+  )
+}

@@ -1,0 +1,354 @@
+Bản phân tích hệ thống mỹ thuật tranh dân gian Đông Hồ dưới góc nhìn của một Kỹ
+sư Kiến trúc Hệ thống (Systems Architect) và Cố vấn Công nghệ Văn hóa, phục vụ
+trực tiếp cho việc xây dựng công cụ số hóa "Xưởng Đông Hồ".
+
+PHẦN 1: PHÂN TÍCH PHONG CÁCH MỸ THUẬT ĐÔNG HỒ (CHUYÊN SÂU)
+
+1. MÀU SẮC (Color Palette)
+
+Hệ màu của tranh Đông Hồ là hệ màu tự nhiên (organic pigments), có độ bão hòa
+trung bình thấp, trầm ấm và bề mặt lì (matte), không bóng. Dựa trên phân tích
+phân rã màu sắc từ các tệp tin hình ảnh đã cung cấp, dưới đây là 9 mã màu đặc
+trưng nhất cấu thành nên palette Đông Hồ kỹ thuật số:
+
+1.  Trắng Điệp (#F4E7D3): Màu nền làm từ bột vỏ sò điệp trộn hồ nếp bồi lên giấy
+    dó. Màu trắng ngà, ấm, có độ ánh nhẹ [15].
+2.  Đen Than Xoan (#22251B): Màu dùng cho nét khắc viền, sản xuất từ than lá tre
+    hoặc gỗ xoan chín. Sắc đen lì, có ánh xanh lục nhẹ, không phải đen tuyệt đối
+    (#000000).
+3.  Đỏ Son (#B33E2B): Đỏ khoáng chất (đất đỏ son hoặc sỏi son), trầm, ấm, mang
+    tính hỏa hỷ, xuất hiện nhiều ở trang phục, cờ, hoa sen [1, 20].
+4.  Vàng Hòe (#B07C30): Chiết xuất từ hoa hòe cô đặc, sắc vàng đất/vàng mù tạt
+    sậm, biểu trưng cho đất thổ thổ nhưỡng ấm áp [4, 5].
+5.  Xanh Lục Chàm (#265C41): Xanh lục sẫm từ lá chàm hoặc gỉ đồng, độ bão hòa
+    thấp, mang sắc thảo mộc tự nhiên [4].
+6.  Vàng Cam Dành Dành (#E59A38): Màu vàng cam sáng từ quả dành dành, dùng tạo
+    điểm nhấn rực rỡ nhưng vẫn giữ được độ ấm tự nhiên [0, 18].
+7.  Hồng Sen Trầm (#D0898B): Màu hồng cánh sen nhạt từ gỗ vang hoặc phẩm nhuộm
+    thảo mộc, thường dùng cho da người hoặc cánh sen [0, 2].
+8.  Nâu Gụ (#583220): Màu nâu sẫm của vỏ cây sồi hoặc bùn ao, dùng cho các mảng
+    lớn như thân trâu, cột nhà hoặc súc vật [0, 18].
+9.  Xanh Ngọc Điệp (#507C6F): Màu xanh lục pha xám nhẹ, mô phỏng lớp phủ màu
+    mỏng trên nền giấy điệp [1, 10].
+
+2. ĐƯỜNG NÉT (Line Art & Carving Mechanics)
+
+Đường nét trong tranh Đông Hồ không phải nét vẽ tay cọ mượt mà (stroke), mà là
+kết quả của kỹ thuật khắc gỗ (Woodblock Carving). Hệ thống nét có các đặc
+trưng vật lý sau:
+
+  - Tính chất dứt khoát và thô mộc (Chisel Cuts): Khởi đầu và kết thúc nét
+    thường vuông hoặc nhọn đột ngột do vết đục góc của thợ khắc bản âm dương.
+    Nét vẽ có độ dày lớn (bold outlines) để giữ mực đen không bị tràn khi ép
+    giấy.
+  - Nguyên tắc "Nét khóa màu" (Outline Lock): Toàn bộ các mảng màu đều được giới
+    hạn bởi một khung nét đen bên ngoài. Nét đen luôn là lớp trên cùng (layer
+    trên cùng của CSS/Canvas) được in cuối cùng để định hình toàn bộ cấu trúc
+    tranh.
+  - Độ lệch đăng ký (Registration Misalignment / "Lệch màu"): Trong kỹ thuật in
+    thủ công, các mảng màu in trước bằng bản khắc màu thường không khớp tuyệt
+    đối với nét đen in sau. Sự lệch trục từ 1px đến 3px (overflow/underflow)
+    tạo ra các khoảng hở giấy trắng ngà, là một cơ chế thẩm mỹ cốt lõi cần giả
+    lập bằng thuật toán (mã hóa qua thuộc tính offset hoặc translate ngẫu
+    nhiên trong CSS/SVG).
+
+3. BỐ CỤC (Composition Mechanics)
+
+  - Bố cục Phẳng hai chiều (Flat 2D Perspective): Triệt tiêu hoàn toàn phối cảnh
+    viễn cận (linear perspective). Không có điểm tụ. Mọi vật thể đều nằm trên
+    một mặt phẳng trực quan.
+  - Phối cảnh chồng lớp theo chiều dọc (Vertical Stacking): Vật ở xa được xếp
+    lên phía trên màn hình, vật ở gần xếp ở phía dưới (như cách xếp xe cộ, cầu
+    và người trong input_file_3.jpeg hoặc nhân vật trong input_file_11.jpeg).
+    Cực lớn hoặc cực nhỏ được quyết định bởi tính biểu trưng của nhân vật chứ
+    không theo tỷ lệ vật lý thực tế.
+  - Tỷ lệ lấp đầy cao (High Fill Rate): Tranh Đông Hồ hạn chế các khoảng trống
+    lớn vô nghĩa. Nếu có khoảng trống, các nghệ nhân sẽ chèn thêm: chữ Hán-Nôm
+    giải nghĩa (input_file_4), mây ngũ sắc (input_file_6), khóm cỏ dại
+    (input_file_9), hoặc vầng mặt trời/trăng tròn (input_file_21).
+  - Tính cân bằng đối xứng động (Dynamic Symmetry): Trọng tâm tranh luôn nằm ở
+    trung lộ (trục giữa), các họa tiết phụ bao quanh bổ trợ tạo thế đứng vững
+    chãi cho nhân vật chính.
+
+4. 20 MOTIF PHỔ BIẾN NHẤT (Visual Assets Catalog)
+
+Để xây dựng thư viện asset (Stickers/Elements) cho Web App, hệ thống cần số hóa
+chính xác 20 motif sau:
+
+1.  Cậu bé ôm gà (Vinh Hoa): Em bé bụ bẫm ôm con gà trống biểu trưng cho đại
+    cát.
+2.  Cậu bé ôm vịt (Phú Quý): Em bé ôm vịt biểu trưng cho sự giàu sang, an nhàn.
+3.  Lợn âm dương: Con lợn có xoáy âm dương trên mình biểu trưng cho sự sinh sôi
+    nảy nở [18].
+4.  Gà mẹ con (Gà đàn): Gà mẹ bảo vệ đàn con biểu trưng cho sự bình an, mẫu tử
+    [14].
+5.  Đám cưới chuột: Đoàn chuột đi rước dâu và chuột dâng lễ cho mèo.
+6.  Mục đồng thổi sáo: Cậu bé ngồi lưng trâu thả diều hoặc thổi sáo dưới lá sen
+    [0, 17].
+7.  Cá chép trông trăng (Lý ngư vọng nguyệt): Cá chép hướng về bóng trăng dưới
+    đáy nước [21].
+8.  Tố nữ (Tứ bình): Bốn nữ nhạc công chơi nhạc cụ truyền thống (sáo, tỳ bà, tam
+    huyền, bản) [13].
+9.  Bà Triệu cưỡi voi: Hình tượng anh hùng dân tộc cưỡi voi chiến xung trận [9].
+10. Lá sen khổng lồ (Tán lọng sen): Dùng làm lọng che hoặc đệm lót cho nhân vật
+    [0, 10].
+11. Mây ngũ sắc cụm (Auspicious Clouds): Các dải mây xếp nếp lượn sóng cuộn tròn
+    ở biên tranh [6, 8].
+12. Sóng nước dẹt (Flat Water Waves): Các đường vân sóng song song uốn lượn xếp
+    tầng phẳng [6].
+13. Khóm cỏ tranh chân chữ (Edge Grass): Các cụm cỏ 3-5 nhánh nhọn mọc ngược ở
+    rìa đáy bức tranh [0, 9].
+14. Bản chữ Hán-Nôm gỗ: Các khối chữ vuông khắc chìm biểu thị tiêu đề tranh
+    [1, 3, 4].
+15. Hồ lô / Bình hoa: Chi tiết trang trí phụ trên bàn hoặc tay nhân vật
+    [11, 16].
+16. Hoa sen đơn / Nụ sen: Biểu tượng thanh khiết xuất hiện ở các mảng trống
+    [0, 10].
+17. Cây chuối / Lá chuối quạt: Chi tiết bối cảnh nông thôn đặc trưng [8].
+18. Mặt trăng / Mặt trời tròn: Khối tròn đồng nhất không đổ bóng nằm ở góc cao
+    tranh [5, 21].
+19. Vòng xoáy âm dương (Yin-Yang Pattern): Motif trang trí trực tiếp trên cơ thể
+    động vật hoặc kiến trúc [18].
+20. Kiệu rước / Xe ngựa cổ: Cấu trúc phương tiện vận chuyển bằng các nét kỷ hà
+    đơn giản [12].
+
+5. CẢM XÚC VÀ KHÔNG GIAN THẨM MỸ (Aesthetic Sentiment)
+
+  - Tinh thần lạc quan dân dã (Rustic Optimism): Tranh tạo cảm giác vui tươi ấm
+    áp, thanh bình nhưng đầy sức sống của một nền văn minh lúa nước. Sự mộc mạc
+    của chất liệu giấy dó và bột điệp giảm bớt sự gay gắt của các khối màu mạnh.
+  - Tính nghi lễ trầm mặc (Ceremonial Nostalgia): Tranh gắn liền với dịp Tết
+    Nguyên Đán, mang lại cảm xúc linh thiêng, ấm cúng của gia đình và ký ức lịch
+    sử.
+  - Hài hước và châm biếm nhẹ nhàng (Satirical Humor): Thể hiện qua các motif
+    nhân hóa (chuột, mèo, ếch) mang lại sự gần gũi, kết nối thế hệ.
+
+PHẦN 2: ĐỀ XUẤT THIẾT KẾ WEB APP "XƯỞNG ĐÔNG HỒ"
+
+1. 3 CONCEPT HERO SECTION
+
+Concept 1: "The Virtual Woodblock Press" (Trải Nghiệm Khắc Ấn Số)
+
+  - Ý tưởng chính: Tái hiện chân thực quy trình ép từng bản khắc màu lên giấy dó
+    theo cơ chế cuộn chuột (Scroll-driven Animation).
+  - Mô tả giao diện:
+      - Bên trái là tiêu đề "Xưởng Đông Hồ" với font chữ nét đục mộc mạc, cùng
+        một CTA "Bắt đầu khắc tranh".
+      - Bên phải là một khung Canvas hiển thị tờ giấy dó trắng ngà trống rỗng
+        (#F4E7D3).
+      - Khi người dùng cuộn chuột xuống (scroll), một bản khắc gỗ kỹ thuật
+        số 3D/2D chứa màu Đỏ Son dập xuống Canvas, để lại mảng màu đỏ. Cuộn
+        tiếp, bản khắc màu Vàng Hòe dập xuống, tiếp tục là Lục Chàm, và cuối
+        cùng bản khắc nét đen (#22251B) dập mạnh xuống để "khóa màu" hoàn chỉnh
+        bức tranh "Mục đồng thổi sáo".
+  - Phản hồi tương tác (Feedback): Tiếng dập gỗ bồm bộp và tiếng ma sát của xơ
+    giấy dó khi bản khắc nhấc lên.
+
+Concept 2: "The Split-Screen Crafting Dock" (Bàn Thợ Số Hóa)
+
+  - Ý tưởng chính: Giao diện trực quan chia đôi thể hiện sự giao thoa giữa thủ
+    công truyền thống và công nghệ hiện đại.
+  - Mô tả giao diện:
+      - Trái (Môi trường phát triển): Một layout giả lập bảng điều khiển editor
+        dạng tối giản (minimalist UI), có các thanh trượt điều chỉnh: Độ lệch
+        màu (Registration Offset), Độ xước thớ gỗ (Wood grain opacity), và Mật
+        độ điệp (Scallop shine).
+      - Phải (Tác phẩm thời gian thực): Hiển thị một bức tranh Đông Hồ đương đại
+        hóa (ví dụ: nhân vật hiện đại vẽ theo phong cách Đông Hồ). Khi người
+        dùng rê chuột qua màn hình, vùng quét kính lúp (lens) sẽ soi rõ lớp cấu
+        trúc thớ gỗ dọc và các hạt bột điệp óng ánh li ti trên nền giấy dó.
+
+Concept 3: "The Scroll of Dynasties" (Cuộn Tranh Vô Tận)
+
+  - Ý tưởng chính: Khai thác bố cục phẳng xếp tầng của Đông Hồ để tạo một dải
+    panorama chuyển động ngang (Horizontal Infinite Scroll).
+  - Mô tả giao diện:
+      - Toàn bộ Hero Section là một cuộn tranh liên hoàn chuyển động chậm từ
+        phải qua trái.
+      - Các nhân vật trong tranh Đông Hồ (Chuột đi rước dâu, Cậu bé ôm gà, Mục
+        đồng cưỡi trâu) được tách lớp Parallax thành 3 layer chuyển động với
+        tốc độ khác nhau tạo chiều sâu phẳng ấn tượng.
+      - Nền của trang web có texture giấy dó thô mịn chạy liền mạch. Khi người
+        dùng click vào bất kỳ nhân vật nào đang di chuyển, nhân vật đó sẽ
+        "tách" ra khỏi cuộn tranh và bay vào khung biên tập chính để người dùng
+        bắt đầu tùy chỉnh.
+
+2. PALETTE MÀU GIAO DIỆN CHÍNH (UI Color Palette - 6 Màu)
+
+Hệ màu giao diện được thiết kế để tôn vinh tác phẩm nghệ thuật, không lấn át màu
+sắc của tranh do người dùng tạo ra, đồng thời bảo đảm các tiêu chuẩn về độ tương
+phản (WCAG AA):
+
+| Vai trò màu         | Tên màu        | Mã Hex    | Ứng dụng thực tế trong UI                            |
+| :------------------ | :------------- | :-------- | :--------------------------------------------------- |
+| **Canvas/Base**     | Giấy Điệp Nhạt | `#F9F5EE` | Màu nền chính của toàn hệ thống (Main background)    |
+| **Surface/Card**    | Giấy Dó Cổ     | `#EADABF` | Nền các thẻ điều hướng, menu panel, sidebar          |
+| **Primary Text**    | Đen Than Xoan  | `#1F221B` | Chữ chính, icon, đường viền phân cách (borders)      |
+| **Primary/CTA**     | Đỏ Son         | `#A83222` | Nút hành động chính (Bắt đầu, Xuất file, Mua bản in) |
+| **Accent**          | Vàng Hòe       | `#C28B38` | Trạng thái hover, highlights, tag chọn lựa           |
+| **Support/Success** | Xanh Lục Thảo  | `#2C5E43` | Nút lưu thành công, chỉ báo hệ thống                 |
+
+3. FONT CHỮ ĐỀ XUẤT (Google Fonts)
+
+Hệ thống typography phối hợp giữa tính thô mộc của kỹ thuật khắc chữ thủ công cổ
+xưa và sự sắc sảo, sạch sẽ của giao diện ứng dụng hiện đại:
+
+  - Font Tiêu đề chính (Headings - H1, H2): Fraunces
+      - Lý do chọn: Đây là một font Serif có thuộc tính "Soft-wonky" độc đáo.
+        Các nét serif của nó có cấu trúc góc cạnh hơi thô cứng, mô phỏng cực
+        tốt các đường cắt vát bằng dao khắc của thợ khắc gỗ thủ công Đông Hồ.
+        Khi hiển thị ở kích thước lớn với font-weight cao (700-900), Fraunces
+        mang lại cảm giác cổ kính, nặng đô và đầy nghệ thuật.
+  - Font Tiêu đề phụ/Chữ Hán-Nôm giả lập (Subheadings/Accents): Noto Serif TC
+    hoặc Playfair Display
+      - Lý do chọn: Đối với các nhãn dán, chú thích giả lập chữ khắc cổ hoặc
+        tiêu đề khối phụ, Playfair Display cung cấp độ tương phản nét thanh-nét
+        đậm mạnh mẽ, tạo sự sang trọng và trang nghiêm.
+  - Font Thân bài (Body text, UI Labels, Inputs): Be Vietnam Pro
+      - Lý do chọn: Font Sans-serif hiện đại được tối ưu hóa 100% cho dấu tiếng
+        Việt. Thiết kế hình học tối giản, trung tính giúp người dùng đọc các
+        hướng dẫn kỹ thuật trên giao diện một cách rõ ràng mà không bị phân
+        tâm bởi các yếu tố trang trí của tiêu đề nghệ thuật.
+
+---CONCEPT UI--- Tên concept: Kinh Bắc Họa Ấn Màu nền chính: #F4E7D3 (Trắng
+Điệp) Màu text: #22251B (Đen Than Xoan) Màu accent: #B07C30 (Vàng Hòe) Màu
+button: #B33E2B (Đỏ Son) Font hiển thị: Fraunces Font nội dung: Be Vietnam Pro
+
+Bố cục Hero Section:
+
+Hero Section sử dụng cấu trúc lưới phân tách tỷ lệ 60:40 để giới thiệu trực quan
+cơ chế hoạt động của web app trước khi người dùng chuyển sang trình biên tập đầy
+đủ:
+
+  - Khối bên trái (60% chiều rộng): Là khu vực thông tin và điều hướng chính.
+    Tiêu đề chính "XƯỞNG ĐÔNG HỒ" được dàn dựng bằng font Fraunces (kích thước
+    lớn, nét siêu dày - Black Weight) sơn màu Đen Than Xoan, tạo cảm giác như
+    các ký tự gỗ được đục trực tiếp từ thớt gỗ thị cổ. Bên dưới là một đoạn mô
+    tả ngắn giới thiệu quy trình in tranh thủ công bằng công nghệ số hóa. Nút
+    CTA lớn (#B33E2B) có hiệu ứng viền đen giả lập nét khắc gỗ, dẫn trực tiếp
+    vào phòng xưởng ảo.
+  - Khối bên phải (40% chiều rộng): Chứa một mô hình tương tác Canvas tương tác
+    thời gian thực. Mô hình này mô phỏng bức tranh "Mục đồng thổi sáo" được phân
+    rã thành các layer vật lý bay dọc theo trục Z. Khi người dùng di chuyển
+    chuột qua, các lớp gỗ khắc màu (Đỏ Son, Vàng Hòe, Xanh Lục) sẽ dịch chuyển
+    tách rời nhau ra khỏi tờ giấy dó nền, giúp người dùng hiểu ngay nguyên lý
+    "Mỗi màu một bản khắc" của Đông Hồ.
+
+Bố cục thanh công cụ bên trái (Tool Sidebar):
+
+Thanh công cụ được tổ chức theo chiều dọc, thiết kế phẳng hóa mô phỏng chiếc hòm
+gỗ chứa dụng cụ của nghệ nhân xưa. Chiều rộng cố định 320px, sử dụng màu nền
+#EADABF để phân tách rõ với khu vực Canvas:
+
+  - Khối quản lý Lớp Màu (Registration Layers Panel): Đây là lõi điều khiển của
+    ứng dụng. Thay vì các layer thông thường, hệ thống hiển thị 5 thẻ tương
+    ứng với các công đoạn in thủ công:
+    1.  Lớp 1: Quét Điệp (Chỉnh độ dày mỏng của bột vỏ điệp trên nền giấy)
+    2.  Lớp 2: Khắc Hoàng (Mảng màu Vàng Hòe)
+    3.  Lớp 3: Khắc Lục (Mảng màu Xanh Lục)
+    4.  Lớp 4: Khắc Son (Mảng màu Đỏ Son)
+    5.  Lớp 5: Khắc Nét (Bản in nét đen ngoài cùng) Mỗi thẻ tích hợp một thanh
+        trượt vật lý để điều chỉnh hai thông số: Độ thấm mực (Ink Bleed) và Độ
+        lệch đăng ký (Registration Offset X/Y) để giả lập sai số khi thợ đặt
+        bản in bằng tay.
+  - Thư viện Motif (Stickers & Assets Panel): Sử dụng dạng danh sách thả xuống
+    (Accordion) chứa 20 motif phổ biến đã được vector hóa (Cậu bé ôm gà, Lợn âm
+    dương, Cá chép, Mây sóng, Khóm cỏ...). Người dùng chỉ cần kéo và thả (Drag
+    and Drop) các asset này trực tiếp vào vùng Canvas chính diện.
+
+Bố cục Canvas chính giữa:
+
+Khu vực làm việc trung tâm nổi bật trên nền xám tối tối giản (#2E2A24), giúp
+hướng toàn bộ sự tập trung của thị giác vào tờ giấy dó kỹ thuật số:
+
+  - Khung vẽ giấy dó (Main Canvas Sheet): Là một khung hình chữ nhật tỷ lệ vàng
+    mô phỏng chính xác tờ giấy dó bồi điệp truyền thống. Các cạnh của tờ giấy
+    được bo góc nhẹ, hơi xơ xước không đều (deckled edge) và đổ bóng đổ mềm
+    để tạo cảm giác nổi trên mặt bàn gỗ tối màu.
+  - Hệ chốt căn chỉnh (Registration Pegs Guide): Ở rìa biên trên và biên dưới
+    của tờ giấy dó có hiển thị 4 chấm tròn đỏ tượng trưng cho "Cối đăng ký"
+    (các chốt gỗ định vị ngoài đời thực). Khi người dùng kéo dãn hay xoay các
+    mảng màu, hệ thống lưới định vị này sẽ sáng lên, giúp căn chỉnh các mảng
+    màu khớp với bản nét đen cuối cùng.
+
+Hiệu ứng đặc trưng:
+
+  - Hiệu ứng Ép Bản Khắc (Woodblock Press Stamp Animation): Khi người dùng thả
+    một họa tiết mới hoặc thay đổi màu sắc của một phân lớp, ứng dụng sẽ chạy
+    một animation ngắn. Toàn bộ họa tiết đó sẽ tạm thời mờ đi, một bản khắc gỗ
+    ảo (3D bán trong suốt) ép mạnh từ phía trên màn hình xuống tờ giấy Canvas
+    theo trục Z. Khi tiếp xúc mặt giấy, một làn sương mịn li ti màu mực bay ra
+    nhẹ ở rìa họa tiết cùng tiếng "bịch" trầm mộc, họa tiết hiển thị rõ nét với
+    hiệu ứng thấm loang mực nhẹ vào các xơ giấy dó.
+  - Hiệu ứng Lệch Trục Vật Lý (Registration Drift Simulation): Khi người dùng
+    điều chỉnh thanh trượt offset của một lớp màu, lớp màu đó không chuyển
+    động cứng nhắc mà sẽ dịch chuyển mềm mại với hiệu ứng lò xo (spring
+    physics). Đồng thời, các vùng giao thoa giữa màu và nét đen sẽ tự động tính
+    toán để lộ ra các vệt giấy trắng ngà nền, tạo ra trải nghiệm thị giác của
+    một bức tranh in lỗi nhịp bằng tay.
+  - Hiệu ứng Óng Ánh Của Điệp (Scallop Shimmer Effect): Hệ thống sử dụng một bộ
+    lọc WebGL Shader phủ lên toàn bộ bề mặt giấy dó. Khi người dùng rê chuột qua
+    lại trên Canvas (đối với máy tính) hoặc xoay nghiêng thiết bị (sử dụng
+    Device Orientation API trên điện thoại), lớp bột điệp nghiền từ vỏ sò sẽ
+    phản chiếu ánh sáng trắng bạc óng ánh theo góc nghiêng của góc nhìn, tái
+    tạo chân thực chất liệu độc nhất vô nhị của tranh Đông Hồ [15].
+
+
+Dưới đây là prompt tiếng Anh được thiết kế tối ưu hóa cấu trúc để bạn copy-paste
+trực tiếp vào v0.dev.
+
+Prompt này sử dụng các thuật ngữ kỹ thuật, mô tả hệ thống component phân lớp rõ
+ràng, chỉ định chính xác mã màu hex và các lớp Tailwind tương ứng để mô hình AI
+của v0 có thể sinh mã nguồn React + Tailwind CSS tối ưu nhất:
+
+Create a high-fidelity, interactive React web application interface for "Xưởng Đông Hồ" (a digital Vietnamese Dong Ho folk art editor) with a sophisticated dark theme inspired by traditional craft workshops. 
+
+### Design Tokens & Color Palette:
+- Screen Background: `#121110` (Deep charcoal wood soot dark)
+- Panel & Sidebar Background: `#1E1C1A` with fine border colors of `#2E2B27`
+- Warm Text: `#EADABF` (Muted straw cream for dark UI contrast)
+- Primary CTA Red: `#B33E2B` (Traditional Cinnabar Red / Đỏ Son)
+- Active Yellow Accent: `#B07C30` (Sophora Yellow / Vàng Hòe)
+- Active Green Accent: `#265C41` (Copper/Indigo Green / Xanh Lục)
+- Canvas Paper Color: `#F4E7D3` (Pearlescent Scallop-shell white / Giấy Điệp)
+
+### Typography & Aesthetics:
+- Headings & Titles: Rich, organic Serif styling (use 'font-serif' or 'Fraunces' if imported)
+- UI Labels & Controls: Highly legible Sans-Serif (use 'font-sans' or 'Be Vietnam Pro')
+- Visual Style: Clean minimalist SaaS editor layout blended with raw, rustic Vietnamese textures, subtle glowing status lights, and fine borders.
+
+### Component Architecture & Layout:
+1. **Navigation Bar (Header):**
+   - Left side: Logo slot with a rustic vector stamp icon, followed by "XƯỞNG ĐÔNG HỒ" in bold Serif uppercase.
+   - Center: Segmented control tabs ("Trình Biên Tập" (Editor), "Triển Lãm" (Gallery), "Lịch Sử" (History)) with a warm glow highlight on active state.
+   - Right side: Quick-actions including Undo/Redo icons and a prominent primary red (`#B33E2B`) button labeled "In Bản Khắc" (Press Woodblock).
+
+2. **Left Sidebar (Motif Browser / Thư Viện Họa Tiết):**
+   - Panel width: `w-80`. 
+   - Uses an accordion layout containing categorized grid structures for traditional vector stamps:
+     - "Động Vật" (Auspicious Animals: Yin-Yang Pig, Lucky Rooster, Carp)
+     - "Con Người" (Characters: Flute-playing Boy, Wrestler, Lady Trieu)
+     - "Mây Sóng & Cây Cỏ" (Nature elements: Stylized clouds, flat water waves, lotus flower, banana leaf)
+   - Each motif item should be displayed as a card on a dark surface (`#2C2824`) with drag-and-drop icon handles.
+
+3. **Main Canvas Workspace (Center Area):**
+   - A flex-1 viewport with a dark workspace background (`#121110`).
+   - Floating in the center is the active artwork canvas: a clean rectangular frame colorized in `#F4E7D3` representing "Giấy Điệp".
+   - Give the paper canvas card smooth inner shadows, organic slightly-frayed edges (simulate with subtle borders), and a soft warm drop shadow.
+   - Inside the canvas, render a sample vector scene containing the "Mục đồng thổi sáo" (Boy playing flute on water buffalo) motif, exhibiting realistic manual-printing imperfections (color layers shifting slightly outside the black outline).
+
+4. **Right Panel (Woodblock Layer Properties):**
+   - Panel width: `w-80`.
+   - Contains a "Lớp Bản In" (Printing Layers) widget with 5 vertical cards representing woodblock separations: "Nền Điệp", "Màu Hoàng", "Màu Lục", "Màu Son", "Nét Đen" (Outline).
+   - Integrate horizontal adjustment sliders for physical simulation values:
+     - "Lệch Màu" (Registration Drift X/Y offset slider)
+     - "Thấm Mực" (Ink Absorption opacity)
+     - "Thớ Gỗ" (Wood Grain Texture depth)
+     - "Ánh Điệp" (Pearlescent Shimmer intensity)
+
+5. **Bottom Floating Toolbar:**
+   - A translucent capsule-shaped menu anchored at the bottom center of the canvas area.
+   - Contains zoom percentage controls, reset viewport button, and a central play button labeled "Nhấp Bản Khắc" (Trigger Woodblock Print animation) accented with an active green (`#265C41`) status ring.
+
+Please implement using modern Tailwind CSS, Lucide-react icons, and shadcn-inspired component aesthetics. Ensure all UI labels are in Vietnamese for authenticity.
+
