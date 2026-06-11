@@ -24,7 +24,7 @@ export function SiteHeader() {
           <span className="flex size-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <Stamp className="size-5" aria-hidden="true" />
           </span>
-          <span className="font-serif text-lg font-bold tracking-tight text-foreground">
+          <span className="font-serif text-lg font-bold tracking-tight text-[#22251B]">
             Xưởng Đông Hồ
           </span>
         </Link>
@@ -34,7 +34,7 @@ export function SiteHeader() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="text-sm font-medium text-[#22251B] transition-colors hover:text-[#B33E2B]"
             >
               {link.label}
             </Link>
@@ -43,8 +43,8 @@ export function SiteHeader() {
 
         <div className="hidden items-center gap-3 md:flex">
           <Button
-            variant="ghost"
-            className="text-foreground hover:bg-muted hover:text-foreground"
+            variant="outline"
+            className="border-[#22251B] text-[#22251B] hover:bg-[#22251B]/5 cursor-pointer"
           >
             Đăng Nhập
           </Button>
@@ -71,7 +71,7 @@ export function SiteHeader() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                className="rounded-md px-3 py-2.5 text-sm font-medium text-[#22251B] transition-colors hover:text-[#B33E2B] hover:bg-[#22251B]/5"
               >
                 {link.label}
               </Link>

@@ -1,142 +1,120 @@
 "use client"
 
-import { useState } from "react"
-import { Search, Upload, Sparkles } from "lucide-react"
-import type { Mode } from "@/components/editor/canvas-editor"
+import { Palette } from "lucide-react"
 
-type Motif = { glyph: string; label: string; cat: string }
+type PresetItem = {
+  key: string
+  name: string
+  desc: string
+  style: React.CSSProperties
+}
 
-const MOTIFS: Motif[] = [
-  { glyph: "🐖", label: "Lợn đàn", cat: "Linh vật" },
-  { glyph: "🐓", label: "Gà trống", cat: "Linh vật" },
-  { glyph: "🐟", label: "Cá chép", cat: "Linh vật" },
-  { glyph: "🐉", label: "Rồng", cat: "Linh vật" },
-  { glyph: "🐅", label: "Hổ", cat: "Linh vật" },
-  { glyph: "🦚", label: "Chim công", cat: "Linh vật" },
-  { glyph: "🌸", label: "Hoa sen", cat: "Cây cỏ" },
-  { glyph: "🌿", label: "Cành trúc", cat: "Cây cỏ" },
-  { glyph: "🍃", label: "Lá đa", cat: "Cây cỏ" },
-  { glyph: "🌾", label: "Lúa vàng", cat: "Cây cỏ" },
-  { glyph: "🌊", label: "Sóng nước", cat: "Mây Sóng" },
-  { glyph: "☁️", label: "Mây lành", cat: "Mây Sóng" },
-  { glyph: "福", label: "Phúc", cat: "Chữ Nôm" },
-  { glyph: "祿", label: "Lộc", cat: "Chữ Nôm" },
-  { glyph: "壽", label: "Thọ", cat: "Chữ Nôm" },
-  { glyph: "🖼️", label: "Khung kép", cat: "Khung" },
-  { glyph: "▢", label: "Khung vuông", cat: "Khung" },
+const PRESETS_LIST: PresetItem[] = [
+  {
+    key: "co-dien",
+    name: "Cổ Điển",
+    desc: "Bản in gốc, màu sắc cân bằng và chân thực nhất.",
+    style: { backgroundColor: "#E4DDD0" },
+  },
+  {
+    key: "tranh-go",
+    name: "Tranh Gỗ",
+    desc: "Đậm nét khắc, thớ gỗ thô sơ và mộc mạc.",
+    style: { background: "linear-gradient(135deg, #8B5A2B 0%, #4A2E16 100%)" },
+  },
+  {
+    key: "diep-nga",
+    name: "Điệp Ngà",
+    desc: "Phủ óng ánh của vỏ điệp giã nhuyễn, tông màu ngà ấm.",
+    style: { background: "linear-gradient(135deg, #FFFDD0 0%, #D8C3A5 100%)" },
+  },
+  {
+    key: "dem-lang",
+    name: "Đêm Làng",
+    desc: "Độ tương phản bóng tối sâu thẳm làng quê yên bình.",
+    style: { background: "linear-gradient(135deg, #1E293B 0%, #0B132B 100%)" },
+  },
+  {
+    key: "phai-co",
+    name: "Phai Cổ",
+    desc: "Tông màu hoài niệm trầm tư phai nhòa theo thời gian.",
+    style: { background: "linear-gradient(135deg, #C4A484 0%, #8E7051 100%)" },
+  },
+  {
+    key: "muc-tuoi",
+    name: "Mực Tươi",
+    desc: "Mực tàu cô đặc đen bóng, viền nét sắc lạnh.",
+    style: { background: "linear-gradient(135deg, #333333 0%, #000000 100%)" },
+  },
 ]
-
-const CATEGORIES = ["Linh vật", "Cây cỏ", "Mây Sóng", "Chữ Nôm", "Khung"]
 
 export function MotifSidebar({
   mode,
-  onPick,
+  activePreset,
+  onApplyPreset,
 }: {
-  mode: Mode
-  onPick: (glyph: string, label: string) => void
+  mode: string
+  activePreset: string | null
+  onApplyPreset: (key: string) => void
 }) {
-  const [query, setQuery] = useState("")
-  const [cat, setCat] = useState("Linh vật")
-
-  const filtered = MOTIFS.filter((m) => {
-    const matchesCat = m.cat === cat
-    const matchesQuery = query
-      ? m.label.toLowerCase().includes(query.toLowerCase())
-      : true
-    return query ? matchesQuery : matchesCat
-  })
-
   return (
-    <aside className="flex w-[320px] shrink-0 flex-col border-r border-[rgba(176,124,48,0.15)] bg-[#1E1C1A]">
-      {/* Search */}
-      <div className="border-b border-[rgba(176,124,48,0.15)] p-4">
-        <div className="relative">
-          <Search
-            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#A99672]"
-            aria-hidden="true"
-          />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Tìm họa tiết cổ..."
-            className="w-full rounded-lg border border-[rgba(176,124,48,0.2)] bg-[#121110] py-2.5 pl-9 pr-3 text-sm text-[#EADABF] placeholder:text-[#A99672] focus:border-[#C49A5C] focus:outline-none"
-          />
-        </div>
+    <aside className="flex w-[320px] shrink-0 flex-col border-r border-[#C8BEA8] bg-[#EDE8DE]">
+      {/* Title */}
+      <div className="border-b border-[#C8BEA8] p-4 flex items-center gap-2">
+        <span className="flex size-7 items-center justify-center rounded-md bg-[#B33E2B] text-white">
+          <Palette className="size-4" aria-hidden="true" />
+        </span>
+        <h2 className="font-serif text-sm font-bold text-[#22251B]">
+          PHONG CÁCH TRANH
+        </h2>
       </div>
 
-      {mode === "ai" ? (
-        <div className="flex flex-1 flex-col items-center justify-center gap-3 p-6 text-center">
-          <span className="flex size-12 items-center justify-center rounded-full bg-[#C49A5C]/15 text-[#C49A5C]">
-            <Sparkles className="size-6" aria-hidden="true" />
-          </span>
-          <p className="font-serif text-sm font-semibold text-[#EADABF]">
-            Chế độ AI tạo họa tiết
-          </p>
-          <p className="text-xs leading-relaxed text-[#A99672]">
-            Mô tả họa tiết bạn muốn, AI sẽ phác thảo bản khắc theo phong cách
-            Đông Hồ. Chuyển về chế độ A để dùng thư viện mộc bản.
-          </p>
-        </div>
-      ) : (
-        <>
-          {/* Category tabs */}
-          <div className="flex flex-wrap gap-1.5 border-b border-[rgba(176,124,48,0.15)] p-3">
-            {CATEGORIES.map((c) => (
-              <button
-                key={c}
-                type="button"
-                onClick={() => {
-                  setCat(c)
-                  setQuery("")
-                }}
-                className={`stamp-editor rounded-full px-2.5 py-1 text-[11px] font-medium transition-colors ${
-                  cat === c && !query
-                    ? "bg-[#AD3B2C] text-[#F6ECD9]"
-                    : "border border-[rgba(176,124,48,0.2)] text-[#A99672] hover:text-[#EADABF]"
-                }`}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
+      {/* Preset List */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        {PRESETS_LIST.map((preset) => {
+          const isActive = activePreset === preset.key
+          return (
+            <button
+              key={preset.key}
+              type="button"
+              onClick={() => onApplyPreset(preset.key)}
+              className={`w-full text-left flex items-start gap-4 rounded-xl border p-3.5 transition-all duration-200 cursor-pointer ${
+                isActive
+                  ? "border-[#B33E2B] bg-[#F9F5EE] shadow-[0_4px_12px_rgba(179,62,43,0.08)] scale-[1.01]"
+                  : "border-[#C8BEA8] bg-[#E4DDD0]/60 hover:bg-[#E4DDD0] hover:border-[#22251B]/50"
+              }`}
+              aria-pressed={isActive}
+            >
+              {/* Color Box indicator */}
+              <span
+                className="size-10 shrink-0 rounded-lg border border-[#C8BEA8]/50 shadow-inner"
+                style={preset.style}
+                aria-hidden="true"
+              />
 
-          {/* Motif grid */}
-          <div className="min-h-0 flex-1 overflow-y-auto p-3">
-            <div className="grid grid-cols-2 gap-2.5">
-              {filtered.map((m, i) => (
-                <button
-                  key={`${m.glyph}-${i}`}
-                  type="button"
-                  onClick={() => onPick(m.glyph, m.label)}
-                  className="motif-card group flex aspect-square flex-col items-center justify-center gap-1.5 rounded-lg border border-[rgba(176,124,48,0.15)] bg-[#1E1C1A] transition-all hover:border-[#C49A5C]"
+              {/* Text */}
+              <div className="space-y-1">
+                <p
+                  className={`font-serif text-sm font-bold ${
+                    isActive ? "text-[#B33E2B]" : "text-[#22251B]"
+                  }`}
                 >
-                  <span className="text-3xl leading-none transition-transform group-active:scale-90">
-                    {m.glyph}
-                  </span>
-                  <span className="text-[11px] text-[#A99672] group-hover:text-[#EADABF]">
-                    {m.label}
-                  </span>
-                </button>
-              ))}
-              {filtered.length === 0 && (
-                <p className="col-span-2 py-8 text-center text-xs text-[#A99672]">
-                  Không tìm thấy họa tiết phù hợp.
+                  {preset.name}
                 </p>
-              )}
-            </div>
-          </div>
-        </>
-      )}
+                <p className="text-[11px] leading-relaxed text-[#3D3A35]">
+                  {preset.desc}
+                </p>
+              </div>
+            </button>
+          )
+        })}
+      </div>
 
-      {/* Bottom action */}
-      <div className="border-t border-[rgba(176,124,48,0.15)] p-3">
-        <button
-          type="button"
-          className="stamp-editor flex w-full items-center justify-center gap-2 rounded-lg border border-[rgba(176,124,48,0.3)] bg-transparent py-2.5 text-xs font-semibold text-[#EADABF] transition-colors hover:bg-[#121110]"
-        >
-          <Upload className="size-3.5" aria-hidden="true" />
-          Tải lên họa tiết tự do
-        </button>
+      {/* Footer hint */}
+      <div className="border-t border-[#C8BEA8] p-4 bg-[#EDE8DE]">
+        <p className="text-[11px] leading-relaxed text-center text-[#3D3A35]">
+          Nhấp chọn phong cách để đổi bộ lọc nhanh. Bạn có thể tự tinh chỉnh thêm thông số ở bảng bên phải.
+        </p>
       </div>
     </aside>
   )

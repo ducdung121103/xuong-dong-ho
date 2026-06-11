@@ -3,7 +3,6 @@
 import { Button, buttonVariants } from "@/components/ui/button"
 import { ArrowRight, Stamp } from "lucide-react"
 import { useAppStore } from "@/lib/store"
-import { LayeredWoodblock } from "@/components/layered-woodblock"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 
@@ -19,10 +18,10 @@ export function Hero() {
             Xưởng khắc ấn số · Làng Đông Hồ
           </span>
 
-          <h1 className="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance text-foreground woodcut-text sm:text-5xl lg:text-6xl">
+          <h1 className="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance text-[#22251B] woodcut-text sm:text-5xl lg:text-6xl">
             Khắc một bản in,
             <br />
-            <span className="text-primary">in một câu chuyện.</span>
+            <span className="text-[#B33E2B]">in một câu chuyện.</span>
           </h1>
 
           <p className="max-w-md text-pretty text-base leading-relaxed text-muted-foreground">
@@ -67,11 +66,22 @@ export function Hero() {
           </dl>
         </div>
 
-        <div className="relative">
-          <LayeredWoodblock />
-          <p className="mt-6 text-center text-xs text-muted-foreground">
-            Di chuột để tách các lớp mộc bản · {"\u201C"}Mục đồng thổi sáo{"\u201D"}
-          </p>
+        <div className="relative mx-auto flex aspect-[4/5] w-full max-w-md items-center justify-center p-4">
+          {/* Framed classic Đông Hồ painting decoration */}
+          <div className="relative overflow-hidden rounded-2xl border-4 border-[#C8BEA8] bg-[#F4E7D3] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.15)] transition-all duration-300 hover:shadow-[0_25px_60px_rgba(0,0,0,0.22)] hover:scale-[1.01] w-full h-full flex items-center justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/dong-ho/buffalo-boy.png"
+              alt="Mục đồng thổi sáo - Tranh dân gian Đông Hồ"
+              className="h-full w-full object-cover rounded-lg border border-[#C8BEA8]"
+            />
+            {/* Traditional red stamp */}
+            <div className="absolute bottom-6 right-6 flex size-8 items-center justify-center rounded border border-[#B33E2B]/30 bg-[#F4E7D3]/95 font-serif text-[9px] font-bold text-[#B33E2B] opacity-90 select-none shadow-sm leading-tight text-center">
+              Đông
+              <br />
+              Hồ
+            </div>
+          </div>
         </div>
       </div>
     </section>

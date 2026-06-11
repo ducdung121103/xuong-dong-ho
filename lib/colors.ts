@@ -43,12 +43,12 @@ export const PALETTE_SWATCHES = Object.values(DONG_HO_PALETTE)
  * Used for the interface chrome, not the artwork palette
  */
 export const UI_TOKENS = {
-  screenBg:   '#1A1816',
-  panelBg:    '#1E1C1A',
-  panelBorder: '#2E2B27',
-  warmText:   '#EADABF',
-  mutedText:  '#A99672',
-  primaryRed: '#AD3B2C',
+  screenBg:   '#F9F5EE',
+  panelBg:    '#EDE8DE',
+  panelBorder: '#C8BEA8',
+  warmText:   '#22251B',
+  mutedText:  '#3D3A35',
+  primaryRed: '#B33E2B',
   accentGold: '#C49A5C',
   accentGreen:'#265C41',
   canvasPaper:'#F4E7D3',

@@ -21,13 +21,13 @@ export function EditorTopbar({
   onGoHome: () => void
 }) {
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between gap-4 border-b border-[rgba(176,124,48,0.15)] bg-[#1E1C1A] px-4">
+    <header className="flex h-14 shrink-0 items-center justify-between gap-4 border-b border-[#C8BEA8] bg-[#EDE8DE] px-4">
       {/* Left: back + logo */}
       <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={onGoHome}
-          className="stamp-editor flex items-center gap-1.5 rounded-md border border-[rgba(176,124,48,0.2)] px-2.5 py-1.5 text-xs font-medium text-[#EADABF] transition-colors hover:bg-[#121110]"
+          className="stamp-editor flex items-center gap-1.5 rounded-md border border-[#C8BEA8] px-2.5 py-1.5 text-xs font-medium text-[#22251B] transition-colors hover:bg-[#F9F5EE] cursor-pointer"
         >
           <ArrowLeft className="size-3.5" aria-hidden="true" />
           Quay lại
@@ -42,48 +42,27 @@ export function EditorTopbar({
         </div>
       </div>
 
-      {/* Center: mode switch */}
-      <div className="flex items-center rounded-lg border border-[rgba(176,124,48,0.2)] bg-[#121110] p-1">
-        {(
-          [
-            { key: "motif", label: "A · Mộc bản" },
-            { key: "ai", label: "B · AI" },
-          ] as const
-        ).map((m) => (
-          <button
-            key={m.key}
-            type="button"
-            onClick={() => onModeChange(m.key)}
-            className={`stamp-editor rounded-md px-3 py-1.5 text-xs font-semibold transition-colors ${
-              mode === m.key
-                ? "bg-[#C49A5C] text-[#1A1714]"
-                : "text-[#A99672] hover:text-[#EADABF]"
-            }`}
-            aria-pressed={mode === m.key}
-          >
-            {m.label}
-          </button>
-        ))}
-      </div>
+      {/* Center: Empty spacer */}
+      <div className="flex-1" aria-hidden="true" />
 
       {/* Right: undo/redo + export */}
       <div className="flex items-center gap-2">
-        <div className="flex items-center rounded-md border border-[rgba(176,124,48,0.2)]">
+        <div className="flex items-center rounded-md border border-[#C8BEA8]">
           <button
             type="button"
             onClick={onUndo}
             disabled={!canUndo}
-            className="stamp-editor flex size-8 items-center justify-center rounded-l-md text-[#EADABF] transition-colors hover:bg-[#121110] disabled:opacity-30"
+            className="stamp-editor flex size-8 items-center justify-center rounded-l-md text-[#22251B] transition-colors hover:bg-[#F9F5EE] disabled:opacity-30 cursor-pointer"
             aria-label="Hoàn tác"
           >
             <Undo2 className="size-4" aria-hidden="true" />
           </button>
-          <span className="h-5 w-px bg-[rgba(176,124,48,0.2)]" aria-hidden="true" />
+          <span className="h-5 w-px bg-[#C8BEA8]" aria-hidden="true" />
           <button
             type="button"
             onClick={onRedo}
             disabled={!canRedo}
-            className="stamp-editor flex size-8 items-center justify-center rounded-r-md text-[#EADABF] transition-colors hover:bg-[#121110] disabled:opacity-30"
+            className="stamp-editor flex size-8 items-center justify-center rounded-r-md text-[#22251B] transition-colors hover:bg-[#F9F5EE] disabled:opacity-30 cursor-pointer"
             aria-label="Làm lại"
           >
             <Redo2 className="size-4" aria-hidden="true" />

@@ -9,7 +9,7 @@ import { CtaSection } from "@/components/cta-section"
 import { SiteFooter } from "@/components/site-footer"
 import { CanvasEditor } from "@/components/editor/canvas-editor"
 import { Button } from "@/components/ui/button"
-import { Send, RotateCw, ChevronLeft, Loader2, ArrowRight } from "lucide-react"
+import { Send, RotateCw, ChevronLeft, Loader2, ArrowRight, Download } from "lucide-react"
 import { useAppStore } from "@/lib/store"
 import { QUICK_TAGS } from "@/lib/ai-generator"
 import type { GenerateResponse } from "@/lib/ai-generator"
@@ -54,6 +54,7 @@ function AIGeneratorView() {
   ])
   const [input, setInput] = useState("")
   const [loading, setLoading] = useState(false)
+  const [downloadingUrls, setDownloadingUrls] = useState<Record<string, boolean>>({})
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -115,8 +116,47 @@ function AIGeneratorView() {
   }
 
   const handleTransferToCanvas = (imageUrl: string) => {
+    sessionStorage.setItem("pendingCanvasImage", imageUrl)
     setGeneratedImageUrl(imageUrl)
     setActiveView("editor")
+  }
+
+  const handleDownloadImage = async (url: string) => {
+    setDownloadingUrls((prev) => ({ ...prev, [url]: true }))
+    try {
+      const res = await fetch(url)
+      if (!res.ok) throw new Error("Direct fetch failed")
+      const blob = await res.blob()
+      const blobUrl = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = blobUrl
+      a.download = `dong-ho-ai-${Date.now()}.png`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(blobUrl)
+    } catch (err) {
+      console.warn("Direct download failed, trying proxy fallback", err)
+      try {
+        const proxiedUrl = `/api/proxy-image?url=${encodeURIComponent(url)}`
+        const res = await fetch(proxiedUrl)
+        if (!res.ok) throw new Error("Proxy fetch failed")
+        const blob = await res.blob()
+        const blobUrl = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = blobUrl
+        a.download = `dong-ho-ai-${Date.now()}.png`
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(blobUrl)
+      } catch (proxyErr) {
+        console.error("Proxy download failed, opening in new tab", proxyErr)
+        window.open(url, "_blank")
+      }
+    } finally {
+      setDownloadingUrls((prev) => ({ ...prev, [url]: false }))
+    }
   }
 
   return (
@@ -162,7 +202,7 @@ function AIGeneratorView() {
                 <p className="text-sm leading-relaxed">{msg.content}</p>
 
                 {msg.image && (
-                  <div className="mt-4 space-y-3">
+                  <div className="mt-4 space-y-3 animate-fade-in duration-300">
                     {/* Paper-textured frame — #F4E7D3 */}
                     <div className="relative overflow-hidden rounded-lg border-4 border-[#B07C30]/30 bg-[#F4E7D3] p-2 shadow-md paper-grain">
                       {/* 1:1 image container */}
@@ -176,25 +216,46 @@ function AIGeneratorView() {
                       </div>
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex flex-col gap-2">
                       <Button
                         size="sm"
-                        variant="outline"
-                        className="flex-1 text-xs h-8 border-secondary/40 text-foreground hover:bg-secondary/10"
-                        onClick={() => handleTransferToCanvas(msg.image!)}
+                        disabled={downloadingUrls[msg.image]}
+                        className="w-full text-xs h-9 bg-[#22251B] text-white hover:bg-black/90 transition-colors flex items-center justify-center gap-2 rounded-lg cursor-pointer"
+                        onClick={() => handleDownloadImage(msg.image!)}
                       >
-                        <ArrowRight className="size-3.5 mr-1" />
-                        Chuyển vào Xưởng Canvas
+                        {downloadingUrls[msg.image] ? (
+                          <>
+                            <Loader2 className="size-3.5 animate-spin" />
+                            Đang tải...
+                          </>
+                        ) : (
+                          <>
+                            <Download className="size-3.5" />
+                            Tải ảnh về máy
+                          </>
+                        )}
                       </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="flex-1 text-xs h-8 border-secondary/40 text-foreground hover:bg-secondary/10"
-                        onClick={() => handleSendMessage("Khắc biến thể tương tự")}
-                      >
-                        <RotateCw className="size-3.5 mr-1" />
-                        Khắc biến thể
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-1 text-xs h-8 border-secondary/40 text-foreground hover:bg-secondary/10 cursor-pointer"
+                          onClick={() => handleTransferToCanvas(msg.image!)}
+                          disabled={!msg.image}
+                        >
+                          <ArrowRight className="size-3.5 mr-1" />
+                          Chuyển vào Xưởng Canvas
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-1 text-xs h-8 border-secondary/40 text-foreground hover:bg-secondary/10"
+                          onClick={() => handleSendMessage("Khắc biến thể tương tự")}
+                        >
+                          <RotateCw className="size-3.5 mr-1" />
+                          Khắc biến thể
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 )}

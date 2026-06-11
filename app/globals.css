@@ -50,39 +50,39 @@
 }
 
 :root {
-  /* Folk Art Dark Theme — Đông Hồ */
-  --background: #1A1816;
-  --foreground: #eadabf;
-  --card: #22201d;
-  --card-foreground: #eadabf;
-  --popover: #22201d;
-  --popover-foreground: #eadabf;
-  --primary: #AD3B2C;
-  --primary-foreground: #f6ecd9;
-  --secondary: #C49A5C;
-  --secondary-foreground: #1a1714;
-  --muted: #272421;
-  --muted-foreground: #a99672;
-  --accent: #C49A5C;
-  --accent-foreground: #1a1714;
-  --destructive: #AD3B2C;
-  --border: rgba(196, 154, 92, 0.15);
-  --input: rgba(196, 154, 92, 0.2);
-  --ring: #C49A5C;
-  --chart-1: #AD3B2C;
+  /* Folk Art Light Theme — Đông Hồ (Giấy Dó) */
+  --background: #F9F5EE;
+  --foreground: #3D3A35;
+  --card: #EDE8DE;
+  --card-foreground: #22251B;
+  --popover: #E4DDD0;
+  --popover-foreground: #3D3A35;
+  --primary: #B33E2B;
+  --primary-foreground: #FFFFFF;
+  --secondary: #E4DDD0;
+  --secondary-foreground: #22251B;
+  --muted: #EDE8DE;
+  --muted-foreground: #3D3A35;
+  --accent: #B33E2B;
+  --accent-foreground: #FFFFFF;
+  --destructive: #B33E2B;
+  --border: #C8BEA8;
+  --input: #C8BEA8;
+  --ring: #B33E2B;
+  --chart-1: #B33E2B;
   --chart-2: #C49A5C;
   --chart-3: #5b7152;
   --chart-4: #c98a3a;
   --chart-5: #8a3324;
   --radius: 0.5rem;
-  --sidebar: #22201d;
-  --sidebar-foreground: #eadabf;
-  --sidebar-primary: #AD3B2C;
-  --sidebar-primary-foreground: #f6ecd9;
-  --sidebar-accent: #C49A5C;
-  --sidebar-accent-foreground: #1a1714;
-  --sidebar-border: rgba(196, 154, 92, 0.15);
-  --sidebar-ring: #C49A5C;
+  --sidebar: #EDE8DE;
+  --sidebar-foreground: #3D3A35;
+  --sidebar-primary: #B33E2B;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #E4DDD0;
+  --sidebar-accent-foreground: #22251B;
+  --sidebar-border: #C8BEA8;
+  --sidebar-ring: #B33E2B;
 }
 
 .dark {

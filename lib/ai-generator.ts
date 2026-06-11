@@ -9,10 +9,10 @@
  */
 
 /** Style suffix appended to every image prompt — enforces Đông Hồ aesthetics */
-export const DONG_HO_STYLE_SUFFIX = `in the style of Vietnamese Dong Ho folk woodblock print, flat graphic design, bold black outlines, limited color palette of vermillion red, golden yellow, indigo blue, forest green, white and black, printed on traditional dieu paper with pearl luster, folk art motifs, symmetrical composition, traditional Vietnamese aesthetics, high contrast, no photorealism, no 3D rendering, no shadows, no gradients`
+export const DONG_HO_STYLE_SUFFIX = `in the style of authentic Vietnamese Dong Ho folk woodblock print, flat 2D graphic design, bold black woodcut outlines wrapping flat color shapes, chisel cuts details, limited organic color palette of vermillion red, warm golden yellow, indigo blue, dark forest green, printed on traditional Vietnamese do paper coated with sparkling scallop shell powder (diep paper) with a subtle pearlescent shimmer, matte texture, folk art motifs, flat perspective, dynamic symmetry, high contrast, no photorealism, no 3D rendering, no shadows, no gradients`
 
 /** Negative prompt to exclude unwanted styles */
-export const NEGATIVE_STYLE = `NOT photorealistic, NOT 3D, NOT modern art, NOT Western style, NOT gradient, NOT shadow, NOT photograph, NOT anime, NOT cartoon network style, NOT watercolor, NOT oil painting`
+export const NEGATIVE_STYLE = `NOT photorealistic, NOT 3D, NOT modern art, NOT Western style, NOT gradient, NOT shadow, NOT photograph, NOT anime, NOT cartoon network style, NOT watercolor, NOT oil painting, NOT glossy, NOT shiny, NOT blurry`
 
 /** Quick-tag prompts in Vietnamese with pre-translated English counterparts */
 export const QUICK_TAGS: Array<{ vi: string; en: string }> = [

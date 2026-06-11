@@ -1,13 +1,6 @@
 "use client"
 
-import { useState } from "react"
-import { Eye, EyeOff, GripVertical, ChevronDown, Check } from "lucide-react"
-import type { Layer } from "@/components/editor/canvas-editor"
-import { PALETTE_SWATCHES } from "@/lib/colors"
-
-const SWATCHES = PALETTE_SWATCHES.map((c) => ({ hex: c.hex, name: c.name }))
-
-const TEXT_PRESETS = ["Vinh Hoa", "Phú Quý", "Bình An", "Phúc Lộc", "An Khang"]
+import type { FilterSettings } from "@/components/editor/canvas-editor"
 
 function Slider({
   label,
@@ -15,6 +8,7 @@ function Slider({
   min,
   max,
   onChange,
+  onPointerUp,
   unit = "",
 }: {
   label: string
@@ -22,14 +16,18 @@ function Slider({
   min: number
   max: number
   onChange: (v: number) => void
+  onPointerUp: () => void
   unit?: string
 }) {
   return (
     <div>
       <div className="mb-1.5 flex items-center justify-between">
-        <span className="text-xs text-[#A99672]">{label}</span>
-        <span className="font-mono text-xs text-[#EADABF]">
-          {value}
+        <span className="text-xs text-[#3D3A35]">{label}</span>
+        <span className="font-mono text-xs text-[#22251B]">
+          {value > 0 &&
+          ["Nhiệt Độ Màu", "Đỏ Son", "Vàng Hòe", "Xanh Lục"].includes(label)
+            ? `+${value}`
+            : value}
           {unit}
         </span>
       </div>
@@ -39,7 +37,9 @@ function Slider({
         max={max}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="editor-range w-full"
+        onPointerUp={onPointerUp}
+        onTouchEnd={onPointerUp}
+        className="editor-range w-full cursor-ew-resize"
       />
     </div>
   )
@@ -53,8 +53,8 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <section className="border-b border-[rgba(176,124,48,0.15)] p-4">
-      <h3 className="mb-3 font-mono text-[11px] font-semibold uppercase tracking-wider text-[#C49A5C]">
+    <section className="border-b border-[#C8BEA8] p-4">
+      <h3 className="mb-3 font-mono text-[11px] font-bold uppercase tracking-wider text-[#B33E2B]">
         {title}
       </h3>
       {children}
@@ -63,177 +63,160 @@ function Section({
 }
 
 export function PropertiesPanel({
-  offsetX,
-  offsetY,
-  woodcut,
-  pearl,
-  onOffsetX,
-  onOffsetY,
-  onWoodcut,
-  onPearl,
-  activeColor,
-  onColor,
-  layers,
-  onToggleLayer,
-  onAddText,
+  filters,
+  onFilterChange,
+  onSliderPointerUp,
 }: {
-  offsetX: number
-  offsetY: number
-  woodcut: number
-  pearl: number
-  onOffsetX: (v: number) => void
-  onOffsetY: (v: number) => void
-  onWoodcut: (v: number) => void
-  onPearl: (v: number) => void
-  activeColor: string
-  onColor: (hex: string) => void
-  layers: Layer[]
-  onToggleLayer: (id: string) => void
-  onAddText: (text: string) => void
+  filters: FilterSettings
+  onFilterChange: (key: keyof FilterSettings, value: number) => void
+  onSliderPointerUp: () => void
 }) {
-  const [textOpen, setTextOpen] = useState(false)
-  const [selectedText, setSelectedText] = useState(TEXT_PRESETS[0])
-
   return (
-    <aside className="flex w-[300px] shrink-0 flex-col overflow-y-auto border-l border-[rgba(176,124,48,0.15)] bg-[#1E1C1A]">
-      <Section title="Bản khắc & Calibration">
+    <aside className="flex w-[300px] shrink-0 flex-col overflow-y-auto border-l border-[#C8BEA8] bg-[#EDE8DE]">
+      {/* Group 1: Ánh Sáng */}
+      <Section title="▼ ÁNH SÁNG">
         <div className="flex flex-col gap-4">
           <Slider
-            label="Lệch Trục Đăng Ký (X)"
-            value={offsetX}
-            min={-40}
-            max={40}
-            onChange={onOffsetX}
-            unit="px"
-          />
-          <Slider
-            label="Lệch Trục Đăng Ký (Y)"
-            value={offsetY}
-            min={-40}
-            max={40}
-            onChange={onOffsetY}
-            unit="px"
-          />
-          <Slider
-            label="Thớ Gỗ Xước"
-            value={woodcut}
-            min={0}
-            max={100}
-            onChange={onWoodcut}
+            label="Độ Sáng"
+            value={filters.brightness}
+            min={50}
+            max={150}
+            onChange={(v) => onFilterChange("brightness", v)}
+            onPointerUp={onSliderPointerUp}
             unit="%"
           />
           <Slider
-            label="Ánh Điệp"
-            value={pearl}
+            label="Độ Tương Phản"
+            value={filters.contrast}
+            min={50}
+            max={150}
+            onChange={(v) => onFilterChange("contrast", v)}
+            onPointerUp={onSliderPointerUp}
+            unit="%"
+          />
+          <Slider
+            label="Độ Bão Hòa"
+            value={filters.saturate}
+            min={0}
+            max={200}
+            onChange={(v) => onFilterChange("saturate", v)}
+            onPointerUp={onSliderPointerUp}
+            unit="%"
+          />
+          <Slider
+            label="Nhiệt Độ Màu"
+            value={filters.warmth}
+            min={-50}
+            max={50}
+            onChange={(v) => onFilterChange("warmth", v)}
+            onPointerUp={onSliderPointerUp}
+          />
+        </div>
+      </Section>
+
+      {/* Group 2: Chất Liệu Giấy Dó */}
+      <Section title="▼ CHẤT LIỆU GIẤY DÓ">
+        <div className="flex flex-col gap-4">
+          <Slider
+            label="Hạt Giấy Dó"
+            value={filters.grain}
             min={0}
             max={100}
-            onChange={onPearl}
+            onChange={(v) => onFilterChange("grain", v)}
+            onPointerUp={onSliderPointerUp}
+            unit="%"
+          />
+          <Slider
+            label="Ánh Điệp (óng)"
+            value={filters.pearl}
+            min={0}
+            max={100}
+            onChange={(v) => onFilterChange("pearl", v)}
+            onPointerUp={onSliderPointerUp}
+            unit="%"
+          />
+          <Slider
+            label="Thớ Gỗ Mộc Bản"
+            value={filters.woodcut}
+            min={0}
+            max={100}
+            onChange={(v) => onFilterChange("woodcut", v)}
+            onPointerUp={onSliderPointerUp}
+            unit="%"
+          />
+          <Slider
+            label="Lệch Màu In"
+            value={filters.misregistration}
+            min={0}
+            max={15}
+            onChange={(v) => onFilterChange("misregistration", v)}
+            onPointerUp={onSliderPointerUp}
+            unit="px"
+          />
+        </div>
+      </Section>
+
+      {/* Group 3: Nét & Bóng */}
+      <Section title="▼ NÉT & BÓNG">
+        <div className="flex flex-col gap-4">
+          <Slider
+            label="Nét Viền Sắc"
+            value={filters.sharpness}
+            min={0}
+            max={100}
+            onChange={(v) => onFilterChange("sharpness", v)}
+            onPointerUp={onSliderPointerUp}
+            unit="%"
+          />
+          <Slider
+            label="Đổ Bóng Ngoài"
+            value={filters.shadow}
+            min={0}
+            max={50}
+            onChange={(v) => onFilterChange("shadow", v)}
+            onPointerUp={onSliderPointerUp}
+            unit="px"
+          />
+          <Slider
+            label="Mờ Góc (Vignette)"
+            value={filters.vignette}
+            min={0}
+            max={100}
+            onChange={(v) => onFilterChange("vignette", v)}
+            onPointerUp={onSliderPointerUp}
             unit="%"
           />
         </div>
       </Section>
 
-      <Section title="Bảng màu Đông Hồ">
-        <div className="grid grid-cols-4 gap-2">
-          {SWATCHES.map((s) => (
-            <button
-              key={s.hex}
-              type="button"
-              title={s.name}
-              onClick={() => onColor(s.hex)}
-              className={`stamp-editor relative flex aspect-square items-center justify-center rounded-md border transition-transform ${
-                activeColor === s.hex
-                  ? "border-[#EADABF]"
-                  : "border-[rgba(176,124,48,0.25)]"
-              }`}
-              style={{ backgroundColor: s.hex }}
-              aria-label={s.name}
-              aria-pressed={activeColor === s.hex}
-            >
-              {activeColor === s.hex && (
-                <Check
-                  className="size-4 text-[#EADABF] mix-blend-difference"
-                  aria-hidden="true"
-                />
-              )}
-            </button>
-          ))}
+      {/* Group 4: Tông Màu Đông Hồ */}
+      <Section title="▼ TÔNG MÀU ĐÔNG HỒ">
+        <div className="flex flex-col gap-4">
+          <Slider
+            label="Đỏ Son"
+            value={filters.redShift}
+            min={-50}
+            max={50}
+            onChange={(v) => onFilterChange("redShift", v)}
+            onPointerUp={onSliderPointerUp}
+          />
+          <Slider
+            label="Vàng Hòe"
+            value={filters.yellowShift}
+            min={-50}
+            max={50}
+            onChange={(v) => onFilterChange("yellowShift", v)}
+            onPointerUp={onSliderPointerUp}
+          />
+          <Slider
+            label="Xanh Lục"
+            value={filters.greenShift}
+            min={-50}
+            max={50}
+            onChange={(v) => onFilterChange("greenShift", v)}
+            onPointerUp={onSliderPointerUp}
+          />
         </div>
-        <p className="mt-2 text-[11px] text-[#A99672]">
-          Màu đang chọn áp dụng cho họa tiết kế tiếp hoặc đối tượng đang chọn.
-        </p>
-      </Section>
-
-      <Section title="Lớp bản in">
-        <ul className="flex flex-col gap-1.5">
-          {layers.map((l) => (
-            <li
-              key={l.id}
-              className="flex items-center gap-2 rounded-md border border-[rgba(176,124,48,0.15)] bg-[#121110] px-2 py-2"
-            >
-              <GripVertical
-                className="size-4 cursor-grab text-[#A99672]"
-                aria-hidden="true"
-              />
-              <span className="flex-1 text-sm text-[#EADABF]">{l.name}</span>
-              <button
-                type="button"
-                onClick={() => onToggleLayer(l.id)}
-                className="stamp-editor flex size-7 items-center justify-center rounded text-[#A99672] transition-colors hover:text-[#EADABF]"
-                aria-label={l.visible ? `Ẩn lớp ${l.name}` : `Hiện lớp ${l.name}`}
-                aria-pressed={l.visible}
-              >
-                {l.visible ? (
-                  <Eye className="size-4" aria-hidden="true" />
-                ) : (
-                  <EyeOff className="size-4" aria-hidden="true" />
-                )}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </Section>
-
-      <Section title="Chữ khắc">
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => setTextOpen((v) => !v)}
-            className="flex w-full items-center justify-between rounded-lg border border-[rgba(176,124,48,0.2)] bg-[#121110] px-3 py-2.5 text-sm text-[#EADABF]"
-            aria-expanded={textOpen}
-          >
-            {selectedText}
-            <ChevronDown
-              className={`size-4 text-[#A99672] transition-transform ${textOpen ? "rotate-180" : ""}`}
-              aria-hidden="true"
-            />
-          </button>
-          {textOpen && (
-            <ul className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-[rgba(176,124,48,0.2)] bg-[#1E1C1A] shadow-lg">
-              {TEXT_PRESETS.map((t) => (
-                <li key={t}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedText(t)
-                      setTextOpen(false)
-                    }}
-                    className="w-full px-3 py-2 text-left text-sm text-[#EADABF] transition-colors hover:bg-[#121110]"
-                  >
-                    {t}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-        <button
-          type="button"
-          onClick={() => onAddText(selectedText)}
-          className="stamp-editor mt-3 w-full rounded-lg bg-[#265C41] py-2.5 text-xs font-bold text-[#EADABF] transition-colors hover:bg-[#2f6e4e]"
-        >
-          Khắc chữ {selectedText}
-        </button>
       </Section>
     </aside>
   )

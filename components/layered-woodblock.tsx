@@ -71,8 +71,8 @@ export function LayeredWoodblock() {
               transition: "transform 0.5s cubic-bezier(0.22,1,0.36,1)",
               filter: layer.tint,
               opacity: i === 0 ? 1 : 0.55,
-              mixBlendMode: i === 0 ? "normal" : "screen",
-              backgroundColor: "#1e1c1a",
+              mixBlendMode: i === 0 ? "normal" : "multiply",
+              backgroundColor: "#EDE8DE",
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}

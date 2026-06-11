@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useRef } from "react"
+import { useState, useRef } from "react"
 import { EditorTopbar } from "@/components/editor/editor-topbar"
 import { MotifSidebar } from "@/components/editor/motif-sidebar"
 import { CanvasStage } from "@/components/editor/canvas-stage"
@@ -10,194 +10,243 @@ import { useAppStore } from "@/lib/store"
 
 export type Mode = "motif" | "ai"
 
-export type PlacedMotif = {
-  id: string
-  glyph: string
-  label: string
-  x: number
-  y: number
-  color: string
+export type FilterSettings = {
+  brightness: number     // 50 - 150 (default 100)
+  contrast: number       // 50 - 150 (default 100)
+  saturate: number       // 0 - 200 (default 100)
+  warmth: number         // -50 - 50 (default 0)
+  grain: number          // 0 - 100 (default 0)
+  pearl: number          // 0 - 100 (default 20)
+  woodcut: number        // 0 - 100 (default 35)
+  misregistration: number // 0 - 15 (default 0)
+  sharpness: number      // 0 - 100 (default 0)
+  shadow: number         // 0 - 50 (default 0)
+  vignette: number       // 0 - 100 (default 0)
+  redShift: number       // -50 - 50 (default 0)
+  yellowShift: number    // -50 - 50 (default 0)
+  greenShift: number     // -50 - 50 (default 0)
 }
 
-export type Layer = {
-  id: string
-  name: string
-  visible: boolean
+export const DEFAULT_FILTERS: FilterSettings = {
+  brightness: 100,
+  contrast: 100,
+  saturate: 100,
+  warmth: 0,
+  grain: 0,
+  pearl: 20,
+  woodcut: 35,
+  misregistration: 0,
+  sharpness: 0,
+  shadow: 0,
+  vignette: 0,
+  redShift: 0,
+  yellowShift: 0,
+  greenShift: 0,
 }
 
-const INITIAL_LAYERS: Layer[] = [
-  { id: "diep", name: "Nền Điệp", visible: true },
-  { id: "hoang", name: "Màu Hoàng", visible: true },
-  { id: "luc", name: "Màu Lục", visible: true },
-  { id: "son", name: "Màu Son", visible: true },
-  { id: "den", name: "Nét Đen", visible: true },
-]
+export const PRESETS = {
+  "co-dien": {
+    brightness: 100,
+    contrast: 100,
+    saturate: 100,
+    warmth: 0,
+    grain: 0,
+    pearl: 20,
+    woodcut: 35,
+    misregistration: 0,
+    sharpness: 0,
+    shadow: 0,
+    vignette: 0,
+    redShift: 0,
+    yellowShift: 0,
+    greenShift: 0,
+  },
+  "tranh-go": {
+    brightness: 93,
+    contrast: 125,
+    saturate: 70,
+    grain: 30,
+    warmth: 5,
+    pearl: 15,
+    woodcut: 60,
+    misregistration: 2,
+    sharpness: 10,
+    shadow: 5,
+    vignette: 15,
+    redShift: -5,
+    yellowShift: 5,
+    greenShift: -5,
+  },
+  "diep-nga": {
+    brightness: 110,
+    contrast: 92,
+    saturate: 88,
+    grain: 8,
+    warmth: 18,
+    pearl: 50,
+    woodcut: 20,
+    misregistration: 1,
+    sharpness: 0,
+    shadow: 2,
+    vignette: 10,
+    redShift: 10,
+    yellowShift: 8,
+    greenShift: 0,
+  },
+  "dem-lang": {
+    brightness: 78,
+    contrast: 115,
+    saturate: 82,
+    grain: 12,
+    warmth: -10,
+    pearl: 10,
+    woodcut: 40,
+    misregistration: 3,
+    sharpness: 15,
+    shadow: 12,
+    vignette: 40,
+    redShift: -10,
+    yellowShift: -5,
+    greenShift: 5,
+  },
+  "phai-co": {
+    brightness: 104,
+    contrast: 88,
+    saturate: 50,
+    grain: 22,
+    warmth: 12,
+    pearl: 30,
+    woodcut: 45,
+    misregistration: 2,
+    sharpness: 5,
+    shadow: 3,
+    vignette: 25,
+    redShift: 5,
+    yellowShift: 10,
+    greenShift: -10,
+  },
+  "muc-tuoi": {
+    brightness: 97,
+    contrast: 140,
+    saturate: 78,
+    grain: 6,
+    warmth: 0,
+    pearl: 5,
+    woodcut: 15,
+    misregistration: 0,
+    sharpness: 40,
+    shadow: 8,
+    vignette: 5,
+    redShift: -15,
+    yellowShift: -15,
+    greenShift: -15,
+  },
+} as const
 
 export function CanvasEditor() {
   const setActiveView = useAppStore((s) => s.setActiveView)
-  const generatedImageUrl = useAppStore((s) => s.generatedImageUrl)
-  const setGeneratedImageUrl = useAppStore((s) => s.setGeneratedImageUrl)
 
   const [mode, setMode] = useState<Mode>("motif")
-  const [motifs, setMotifs] = useState<PlacedMotif[]>([])
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [layers, setLayers] = useState<Layer[]>(INITIAL_LAYERS)
-  const [activeColor, setActiveColor] = useState("#AD3B2C")
+  const [filters, setFilters] = useState<FilterSettings>(DEFAULT_FILTERS)
+  const [activePreset, setActivePreset] = useState<string | null>("co-dien")
   const [zoom, setZoom] = useState(100)
 
-  // Calibration
-  const [offsetX, setOffsetX] = useState(0)
-  const [offsetY, setOffsetY] = useState(0)
-  const [woodcut, setWoodcut] = useState(35)
-  const [pearl, setPearl] = useState(20)
-
-  // Undo / redo history
-  const history = useRef<PlacedMotif[][]>([[]])
-  const pointer = useRef(0)
+  // Undo / redo state managed via CanvasStage hooks/refs
   const [canUndo, setCanUndo] = useState(false)
   const [canRedo, setCanRedo] = useState(false)
 
-  // If arriving from AI generator with an image, auto-place it
-  const hasPlacedAiImage = useRef(false)
-  if (generatedImageUrl && !hasPlacedAiImage.current) {
-    hasPlacedAiImage.current = true
-    // Clear the stored URL so it doesn't re-trigger
-    const imageMotif: PlacedMotif = {
-      id: `ai-${Date.now()}`,
-      glyph: "🎨",
-      label: "Ảnh AI",
-      x: 50,
-      y: 50,
-      color: "#AD3B2C",
-    }
-    // Use queueMicrotask to avoid setting state during render
-    queueMicrotask(() => {
-      setMotifs([imageMotif])
-      setSelectedId(imageMotif.id)
-      setGeneratedImageUrl(null)
-    })
+  // Refs for communications
+  const undoRef = useRef<(() => void) | null>(null)
+  const redoRef = useRef<(() => void) | null>(null)
+  const resetRef = useRef<(() => void) | null>(null)
+  const exportRef = useRef<(() => void) | null>(null)
+  const commitPresetHistoryRef = useRef<((f: FilterSettings) => void) | null>(null)
+  const commitSliderHistoryRef = useRef<(() => void) | null>(null)
+  const triggerUploadRef = useRef<(() => void) | null>(null)
+
+  const handleApplyPreset = (presetKey: string) => {
+    setActivePreset(presetKey)
+    const newFilters = PRESETS[presetKey as keyof typeof PRESETS]
+    setFilters(newFilters)
+    commitPresetHistoryRef.current?.(newFilters)
   }
 
-  const commit = useCallback((next: PlacedMotif[]) => {
-    history.current = history.current.slice(0, pointer.current + 1)
-    history.current.push(next)
-    pointer.current = history.current.length - 1
-    setMotifs(next)
-    setCanUndo(pointer.current > 0)
-    setCanRedo(false)
-  }, [])
+  const handleSliderChange = (key: keyof FilterSettings, value: number) => {
+    setActivePreset(null)
+    setFilters((prev) => ({ ...prev, [key]: value }))
+  }
 
-  const undo = useCallback(() => {
-    if (pointer.current <= 0) return
-    pointer.current -= 1
-    setMotifs(history.current[pointer.current])
-    setCanUndo(pointer.current > 0)
-    setCanRedo(true)
-  }, [])
+  const handleSliderPointerUp = () => {
+    commitSliderHistoryRef.current?.()
+  }
 
-  const redo = useCallback(() => {
-    if (pointer.current >= history.current.length - 1) return
-    pointer.current += 1
-    setMotifs(history.current[pointer.current])
-    setCanRedo(pointer.current < history.current.length - 1)
-    setCanUndo(true)
-  }, [])
+  const handleReset = () => {
+    setActivePreset("co-dien")
+    setFilters(DEFAULT_FILTERS)
+    resetRef.current?.()
+  }
 
-  const addMotif = useCallback(
-    (glyph: string, label: string, x = 50, y = 50) => {
-      const motif: PlacedMotif = {
-        id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-        glyph,
-        label,
-        x,
-        y,
-        color: activeColor,
-      }
-      commit([...motifs, motif])
-      setSelectedId(motif.id)
-    },
-    [motifs, activeColor, commit],
-  )
+  const handleUndo = () => {
+    undoRef.current?.()
+  }
 
-  const moveMotif = useCallback(
-    (id: string, x: number, y: number) => {
-      setMotifs((prev) =>
-        prev.map((m) => (m.id === id ? { ...m, x, y } : m)),
-      )
-    },
-    [],
-  )
+  const handleRedo = () => {
+    redoRef.current?.()
+  }
 
-  const commitMove = useCallback(() => {
-    commit(motifs)
-  }, [motifs, commit])
-
-  const recolorSelected = useCallback(
-    (color: string) => {
-      setActiveColor(color)
-      if (selectedId) {
-        commit(
-          motifs.map((m) => (m.id === selectedId ? { ...m, color } : m)),
-        )
-      }
-    },
-    [selectedId, motifs, commit],
-  )
-
-  const toggleLayer = useCallback((id: string) => {
-    setLayers((prev) =>
-      prev.map((l) => (l.id === id ? { ...l, visible: !l.visible } : l)),
-    )
-  }, [])
-
-  const goHome = useCallback(() => {
-    setActiveView("landing")
-  }, [setActiveView])
+  const handleExport = () => {
+    exportRef.current?.()
+  }
 
   return (
-    <div className="flex h-screen w-full flex-col overflow-hidden bg-[#121110] text-[#EADABF]">
+    <div className="flex h-screen w-full flex-col overflow-hidden bg-[#F9F5EE] text-[#3D3A35]">
       <EditorTopbar
         mode={mode}
         onModeChange={setMode}
-        onUndo={undo}
-        onRedo={redo}
+        onUndo={handleUndo}
+        onRedo={handleRedo}
         canUndo={canUndo}
         canRedo={canRedo}
-        onGoHome={goHome}
+        onGoHome={() => setActiveView("landing")}
       />
       <div className="flex min-h-0 flex-1">
-        <MotifSidebar mode={mode} onPick={(g, l) => addMotif(g, l)} />
+        <MotifSidebar
+          mode={mode}
+          activePreset={activePreset}
+          onApplyPreset={handleApplyPreset}
+        />
         <CanvasStage
-          motifs={motifs}
-          layers={layers}
-          selectedId={selectedId}
-          onSelect={setSelectedId}
-          onMove={moveMotif}
-          onMoveEnd={commitMove}
-          onDropMotif={addMotif}
+          filters={filters}
+          setFilters={setFilters}
+          setActivePreset={setActivePreset}
           zoom={zoom}
-          offsetX={offsetX}
-          offsetY={offsetY}
-          woodcut={woodcut}
-          pearl={pearl}
+          onHistoryChange={(undoable, redoable) => {
+            setCanUndo(undoable)
+            setCanRedo(redoable)
+          }}
+          undoRef={undoRef}
+          redoRef={redoRef}
+          resetRef={resetRef}
+          exportRef={exportRef}
+          commitPresetHistoryRef={commitPresetHistoryRef}
+          commitSliderHistoryRef={commitSliderHistoryRef}
+          triggerUploadRef={triggerUploadRef}
         />
         <PropertiesPanel
-          offsetX={offsetX}
-          offsetY={offsetY}
-          woodcut={woodcut}
-          pearl={pearl}
-          onOffsetX={setOffsetX}
-          onOffsetY={setOffsetY}
-          onWoodcut={setWoodcut}
-          onPearl={setPearl}
-          activeColor={activeColor}
-          onColor={recolorSelected}
-          layers={layers}
-          onToggleLayer={toggleLayer}
-          onAddText={(t) => addMotif("筆", t)}
+          filters={filters}
+          onFilterChange={handleSliderChange}
+          onSliderPointerUp={handleSliderPointerUp}
         />
       </div>
-      <EditorToolbar zoom={zoom} onZoom={setZoom} />
+      <EditorToolbar
+        zoom={zoom}
+        onZoom={setZoom}
+        onReset={handleReset}
+        onUndo={handleUndo}
+        canUndo={canUndo}
+        onExport={handleExport}
+        onUploadClick={() => triggerUploadRef.current?.()}
+      />
     </div>
   )
 }
